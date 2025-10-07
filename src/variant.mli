@@ -1,9 +1,11 @@
+@@ portable
+
 open! Core
 open! Import
 
 module Other : sig
   (** enumerate behaves as if this is [Nothing.t]. *)
-  type t
+  type t : immutable_data
   [@@deriving compare ~localize, enumerate, equal ~localize, globalize, hash, sexp_of]
 
   (** A simple generator to help you derive quickcheck on flexible-sexp types. It's your
@@ -27,7 +29,7 @@ module Stable : sig
   module Other : sig
     module V1 : sig
       (** enumerate behaves as if this is [Nothing.t]. *)
-      type nonrec t = Other.t
+      type nonrec t : immutable_data = Other.t
       [@@deriving
         compare ~localize
         , enumerate
@@ -75,6 +77,7 @@ module Stable : sig
     module%template
       [@modality p = (portable, nonportable)] V1
         (T : sig
+         @@ p
            type t [@@deriving sexp]
 
            module Variants : sig
@@ -83,6 +86,7 @@ module Stable : sig
            end
          end)
         () : sig
+      @@ p
       include Flexible_sexp_intf.S [@modality p] with type t := T.t
     end
   end

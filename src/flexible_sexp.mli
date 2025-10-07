@@ -1,3 +1,5 @@
+@@ portable
+
 module Record = Record
 module Variant = Variant
 
@@ -6,7 +8,7 @@ module Variant = Variant
     [Variant.Deep_inflexible] for details on what inflexible means.
 
     This function can safely be nested; inner nestings have no special effect. *)
-val within_inflexible_context : f:(unit -> 'a) -> 'a
+val within_inflexible_context : f:(unit -> 'a) @ local unyielding -> 'a
 
 module Stable : sig
   module Record = Record.Stable

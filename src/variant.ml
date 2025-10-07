@@ -71,7 +71,7 @@ module Stable = struct
 
         type t = T.t [@@deriving sexp]
 
-        module Variant_names : sig
+        module Variant_names : sig @@ portable
           val lookup : string -> [ `Variant | `Special_other_variant ] option
         end = struct
           let normalise name =

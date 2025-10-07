@@ -1,3 +1,5 @@
+@@ portable
+
 open! Core
 open! Import
 
@@ -9,7 +11,7 @@ open! Import
     - Within [f], we are guaranteed that [am_i_within] will return [true].
     - After [f] returns, we are guaranteed that [am_i_within] will return the same as it
       had returned the moment before [run_within] was called. *)
-val run_within : f:(unit -> 'a) -> 'a
+val run_within : f:(unit -> 'a) @ local unyielding -> 'a
 
 (** Query whether we are inside a "deep inflexible" context. See [run_within].
 

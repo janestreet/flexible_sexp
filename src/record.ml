@@ -58,6 +58,7 @@ module Stable = struct
     module%template
       [@modality p = (portable, nonportable)] V1
         (T : sig
+         @@ p
            open! Core
            open! Import
 
@@ -214,6 +215,7 @@ module Stable = struct
     module%template
       [@modality p = (portable, nonportable)] V1
         (T : sig
+         @@ p
            open! Core
            open! Import
 

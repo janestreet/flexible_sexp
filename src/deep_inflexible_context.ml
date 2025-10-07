@@ -19,19 +19,11 @@ let am_i_within_dls_key =
   Domain.Safe.DLS.new_key ~split_from_parent (fun () -> false)
 ;;
 
-let am_i_within () =
-  Domain.Safe.DLS.access (fun access -> Domain.Safe.DLS.get access am_i_within_dls_key)
-  [@nontail]
-;;
-
-let set value =
-  Domain.Safe.DLS.access (fun access ->
-    Domain.Safe.DLS.set access am_i_within_dls_key value)
-  [@nontail]
-;;
+let am_i_within () = Domain.Safe.DLS.get am_i_within_dls_key
+let set value = Domain.Safe.DLS.set am_i_within_dls_key value
 
 let run_within ~f =
   let prev = am_i_within () in
   set true;
-  Exn.protect ~f ~finally:(fun () -> set prev) [@nontail]
+  Exn.protect ~f ~finally:(stack_ fun () -> set prev) [@nontail]
 ;;

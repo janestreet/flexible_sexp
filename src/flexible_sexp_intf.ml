@@ -1,7 +1,7 @@
 open! Core
 open! Import
 
-module type%template [@modality p = (portable, nonportable)] S = sig
+module type%template [@modality p = (portable, nonportable)] S = sig @@ p
   type t
 
   include Sexpable.S with type t := t
