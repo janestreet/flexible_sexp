@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module Tags : sig
-  type t [@@deriving compare ~localize, equal ~localize, hash, sexp_of]
+  type t [@@deriving compare ~localize, equal ~localize, hash, quickcheck, sexp_of]
 
   (** A simple generator to help you derive quickcheck on flexible-sexp types. It's your
       responsibility to pick [field_names] that do not already exist in the record type in
@@ -11,8 +11,6 @@ module Tags : sig
       For an example, see the "Quickcheck" section of the README for this library. *)
   val quickcheck_generator : other_field_names:string list -> t Quickcheck.Generator.t
 
-  val quickcheck_observer : t Quickcheck.Observer.t
-  val quickcheck_shrinker : t Quickcheck.Shrinker.t
   val empty : t
   val is_empty : t -> bool
 
@@ -31,13 +29,17 @@ module Stable : sig
     module V1 : sig
       type nonrec t = Tags.t
       [@@deriving
-        compare ~localize, equal ~localize, hash, sexp, sexp_grammar, stable_witness]
+        compare ~localize
+        , equal ~localize
+        , hash
+        , quickcheck
+        , sexp
+        , sexp_grammar
+        , stable_witness]
 
       (** See unstable documentation. *)
       val quickcheck_generator : other_field_names:string list -> t Quickcheck.Generator.t
 
-      val quickcheck_observer : t Quickcheck.Observer.t
-      val quickcheck_shrinker : t Quickcheck.Shrinker.t
       val empty : t
     end
   end
