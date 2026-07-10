@@ -19,6 +19,9 @@ depends: [
   "dune"        {>= "3.17.0"}
 ]
 available: arch != "x86_32"
+conflicts: [
+  "oxcaml-compiler" {< "5.2.0minus39"}
+]
 synopsis: "A library for creating stable sexp serialization with forward compatibility."
 description: "
 flexible_sexp is a library that creates a stable sexp serialisation of types,
