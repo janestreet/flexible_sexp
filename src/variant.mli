@@ -4,7 +4,8 @@ open! Import
 module Other : sig
   (** enumerate behaves as if this is [Nothing.t]. *)
   type t
-  [@@deriving compare ~localize, enumerate, equal ~localize, globalize, hash, sexp_of]
+  [@@deriving
+    compare ~localize, enumerate, equal ~localize, globalize, hash, sexp_of ~stackify]
 
   (** A simple generator to help you derive quickcheck on flexible-sexp types. It's your
       responsibility to pick [other_constructor_names] that do not already exist in the
@@ -21,6 +22,10 @@ module Other : sig
   module Private__for_flexible_sexp_unit_tests_only : sig
     val of_sexp : Sexp.t -> t
   end
+
+  module Private__for_ppx_flexible_sexp : sig
+    val eq : (t, Sexp.t) Type_equal.t
+  end
 end
 
 module Stable : sig
@@ -29,12 +34,13 @@ module Stable : sig
       (** enumerate behaves as if this is [Nothing.t]. *)
       type nonrec t = Other.t
       [@@deriving
-        compare ~localize
+        bin_shape
+        , compare ~localize
         , enumerate
         , equal ~localize
         , globalize
         , hash
-        , sexp
+        , sexp ~stackify
         , sexp_grammar
         , stable_witness]
 
@@ -58,7 +64,7 @@ module Stable : sig
     module%template.portable
       [@mode m = (global, local)] [@modality p] V1
         (T : sig
-           type t [@@deriving (compare [@mode m]), sexp]
+           type t [@@deriving (compare [@mode.explicit m]), sexp]
 
            module Variants : sig
              val descriptions : (string * int) list
